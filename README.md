@@ -1,2 +1,3 @@
-# scriptableobjects-oriented
-Provide tools for an Unity architecture based on ScriptableObjects
+# ScriptableObjects Oriented
+
+Provide tools for an Unity architecture based on ScriptableObjects.

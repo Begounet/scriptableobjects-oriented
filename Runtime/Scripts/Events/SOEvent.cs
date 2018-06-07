@@ -4,11 +4,13 @@ using UnityEngine;
 
 public abstract class SOEvent : ScriptableObject
 {
+#if UNITY_EDITOR
+
     [TextArea]
     [Tooltip("Describes when your event will be called.")]
     public string description;
-
-#if UNITY_EDITOR
+    
     public abstract void EditorRaise();
+
 #endif
 }

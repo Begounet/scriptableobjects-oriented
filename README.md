@@ -1,6 +1,7 @@
 # ScriptableObjects Oriented
 
-Provide tools for an Unity architecture based on ScriptableObjects (SO).
+Provide tools for an Unity architecture based on ScriptableObjects (SO).<br>
+The philosophy of this plugin is based on that [conference](https://www.youtube.com/watch?v=raQ3iHhE_Kk).
 
 ## Create a SO Event
 A SO Event is a ScriptableObject that can raise event.<br>
@@ -27,3 +28,15 @@ Start by creating a new one.
 - Add additional types
 - Open the SO Event Wizard and link the settings
 - Your new types are now available among the presets
+
+## Using SO Events
+
+Just declare your SO Event in your class, as it is a standard C# class.<br>
+You can dynamically add listener, remove listener and raise event, like in any standard event system.<br>
+However, now you can select the SO Event in the *Project* tab and you will see that you have additional informations.<br>
+All these data are editor-only so no overhead in your final build.<br>
+You can :
+- Add a description : you can give extra datas to explain where it should be called.
+- Set some parameters : these parameters will be used when you click on **Raise**
+- Raise the event : it will trigger the event using the above parameters
+Raising the event is really useful to manually test isolated system.

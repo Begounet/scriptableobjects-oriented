@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
 using UnityEditor;
+using System.Reflection;
+using System;
 
 public class SOEventWizard : ScriptableWizard
 {
@@ -22,12 +24,13 @@ public class SOEventWizard : ScriptableWizard
     };
 
     private const string soEventTemplateFilename = "SOEventTemplate";
+    private const string soEventWizard_SettingsGUID_EditorPrefsKey = "SOEventWizard_SettingsGUID";
 
     public string AssetPath { get; set; }
 
-    private string _eventName = "SOEvent";
+    private SOSettings _settings;
+    private string _eventName = "SOEventName";
     private string _categoryName = "Game";
-    private List<string> _parameterInfos;
 
     [System.Serializable]
     public class ParameterType
@@ -41,7 +44,7 @@ public class SOEventWizard : ScriptableWizard
 
     private static string soEventTemplateFileGUID;
 
-    [MenuItem("Assets/Create/SO/Event", priority = 0)]
+    [MenuItem("Assets/Create/SO/Create/Event", priority = 0)]
     static void CreateWizard()
     {
         SOEventWizard wizard = ScriptableWizard.DisplayWizard<SOEventWizard>("ScriptableObject Event Creation Wizard", "Create");
@@ -62,6 +65,12 @@ public class SOEventWizard : ScriptableWizard
                 Debug.LogErrorFormat("'{0}' cannot be found! Add it in the project and restart the wizard.", soEventTemplateFilename);
             }
         }
+
+        if (_settings == null)
+        {
+            string settingsGUID = EditorPrefs.GetString(soEventWizard_SettingsGUID_EditorPrefsKey);
+            _settings = (SOSettings) AssetDatabase.LoadMainAssetAtPath(AssetDatabase.GUIDToAssetPath(settingsGUID));
+        }
     }
 
     protected override bool DrawWizardGUI()
@@ -76,22 +85,10 @@ public class SOEventWizard : ScriptableWizard
 
         EditorGUILayout.LabelField("Asset Path", AssetPath);
 
-        string newEventName = EditorGUILayout.TextField("Event name", _eventName);
-        if (newEventName != _eventName)
-        {
-            _eventName = newEventName;
-            hasPropertyChanged = true;
-        }
+        hasPropertyChanged |= DrawSettingsField();
+        hasPropertyChanged |= DrawEventName();
+        hasPropertyChanged |= DrawCategory();
 
-        GUI.tooltip = "The category will defined where the event will be in the asset menu";
-        string newCategoryName = EditorGUILayout.TextField("Category", _categoryName);
-        if (newCategoryName != _categoryName)
-        {
-            _categoryName = newCategoryName;
-            hasPropertyChanged = true;
-        }
-        GUI.tooltip = string.Empty;
-        
         SerializedObject eventWizardSO = new SerializedObject(this);
         SerializedProperty parameterInfosSO = eventWizardSO.FindProperty("parameterInfos");
         eventWizardSO.Update();
@@ -99,17 +96,62 @@ public class SOEventWizard : ScriptableWizard
         EditorGUILayout.LabelField("Parameters");
         ++EditorGUI.indentLevel;
         {
-            parameterInfosSO.arraySize = EditorGUILayout.IntField("Number", parameterInfosSO.arraySize);
+            parameterInfosSO.arraySize = EditorGUILayout.DelayedIntField("Number", parameterInfosSO.arraySize);
             for (int parameterIndex = 0; parameterIndex < parameterInfosSO.arraySize; ++parameterIndex)
             {
                 SerializedProperty parameterInfosO = parameterInfosSO.GetArrayElementAtIndex(parameterIndex);
                 hasPropertyChanged |= DrawParameterTypeLayout(parameterInfosO, parameterIndex);
             }
-        }
-        
+        }        
         --EditorGUI.indentLevel;
 
         hasPropertyChanged |= eventWizardSO.ApplyModifiedProperties();
+
+        isValid = CheckValidity();
+        if (isValid)
+        {
+            errorString = string.Empty;
+        }
+
+        return (hasPropertyChanged);
+    }
+
+    bool DrawSettingsField()
+    {
+        UnityEngine.Object newSettingsObj = EditorGUILayout.ObjectField("Settings", _settings, typeof(SOSettings), false);
+        if (newSettingsObj != null)
+        {
+            _settings = newSettingsObj as SOSettings;
+            EditorPrefs.SetString(soEventWizard_SettingsGUID_EditorPrefsKey, AssetDatabase.AssetPathToGUID(AssetDatabase.GetAssetPath(_settings)));
+            return (true);
+        }
+        return (false);
+    }
+
+    bool DrawEventName()
+    {
+        string newEventName = EditorGUILayout.DelayedTextField("Event name", _eventName);
+        if (newEventName != _eventName)
+        {
+            _eventName = newEventName;
+            return (true);
+        }
+        return (false);
+    }
+
+    bool DrawCategory()
+    {
+        bool hasPropertyChanged = false;
+
+        GUI.tooltip = "The category will defined where the event will be in the asset menu";
+        string newCategoryName = EditorGUILayout.DelayedTextField("Category", _categoryName);
+        if (newCategoryName != _categoryName)
+        {
+            _categoryName = newCategoryName;
+            hasPropertyChanged = true;
+        }
+        GUI.tooltip = string.Empty;
+
         return (hasPropertyChanged);
     }
 
@@ -128,7 +170,7 @@ public class SOEventWizard : ScriptableWizard
                 SerializedProperty parameterTypeIndexSO = parameterInfosO.FindPropertyRelative("parameterTypeIndex");
 
                 GUI.tooltip = "Name of the parameter";
-                string newName = EditorGUILayout.TextField(parameterNameSO.stringValue);
+                string newName = EditorGUILayout.DelayedTextField(parameterNameSO.stringValue);
                 if (newName != parameterNameSO.stringValue)
                 {
                     parameterNameSO.stringValue = newName;
@@ -136,7 +178,7 @@ public class SOEventWizard : ScriptableWizard
                 }
 
                 GUI.tooltip = "Type of the parameter";
-                string newTypeName = EditorGUILayout.TextField(parameterTypeNameSO.stringValue);
+                string newTypeName = EditorGUILayout.DelayedTextField(parameterTypeNameSO.stringValue);
                 if (newTypeName != parameterTypeNameSO.stringValue)
                 {
                     parameterTypeNameSO.stringValue = newTypeName;
@@ -147,13 +189,14 @@ public class SOEventWizard : ScriptableWizard
                 }
 
                 GUI.tooltip = "Preset of parameter type";
-                int newParameterTypeIndexValue = EditorGUILayout.Popup(parameterTypeIndexSO.intValue, PresetTypes);
+                string[] allPresetTypes = BuildAllPresetTypes();
+                int newParameterTypeIndexValue = EditorGUILayout.Popup(parameterTypeIndexSO.intValue, allPresetTypes);
                 if (newParameterTypeIndexValue != parameterTypeIndexSO.intValue)
                 {
                     parameterTypeIndexSO.intValue = newParameterTypeIndexValue;
                     hasPropertyChanged = true;
 
-                    parameterTypeNameSO.stringValue = PresetTypes[newParameterTypeIndexValue];
+                    parameterTypeNameSO.stringValue = allPresetTypes[newParameterTypeIndexValue];
                 }
 
                 GUI.tooltip = string.Empty;
@@ -184,6 +227,8 @@ public class SOEventWizard : ScriptableWizard
         soEventTemplateContent = soEventTemplateContent.Replace("{UnityEventParams}", BuildUnityEventParamsString());
         soEventTemplateContent = soEventTemplateContent.Replace("{FunctionParamsDeclaration}", BuildFunctionParamsDeclaration());
         soEventTemplateContent = soEventTemplateContent.Replace("{AllParamNames}", BuildAllParamNames());
+        soEventTemplateContent = soEventTemplateContent.Replace("{AllEditorParamNames}", BuildAllEditorParamNames());
+        soEventTemplateContent = soEventTemplateContent.Replace("{AllEditorParamsDeclarations}", BuildAllEditorParamDeclarations());
 
         string dstFilePath = Path.Combine(AssetPath, _eventName + ".cs");
         File.WriteAllText(dstFilePath, soEventTemplateContent, System.Text.Encoding.UTF8);
@@ -210,12 +255,20 @@ public class SOEventWizard : ScriptableWizard
     {
         string ueParams = string.Empty;
 
-        for (int i = 0; i < parameterInfos.Length; ++i)
+        if (parameterInfos != null && parameterInfos.Length > 0)
         {
-            ueParams += parameterInfos[i].parameterTypeName;
-            if (i + 1 < parameterInfos.Length)
+            for (int i = 0; i < parameterInfos.Length; ++i)
             {
-                ueParams += ", ";
+                ueParams += parameterInfos[i].parameterTypeName;
+                if (i + 1 < parameterInfos.Length)
+                {
+                    ueParams += ", ";
+                }
+            }
+
+            if (!string.IsNullOrEmpty(ueParams))
+            {
+                ueParams = "<" + ueParams + ">";
             }
         }
 
@@ -226,12 +279,15 @@ public class SOEventWizard : ScriptableWizard
     {
         string functionParams = string.Empty;
 
-        for (int i = 0; i < parameterInfos.Length; ++i)
+        if (parameterInfos != null && parameterInfos.Length > 0)
         {
-            functionParams += parameterInfos[i].parameterTypeName + " " + parameterInfos[i].parameterName;
-            if (i + 1 < parameterInfos.Length)
+            for (int i = 0; i < parameterInfos.Length; ++i)
             {
-                functionParams += ", ";
+                functionParams += parameterInfos[i].parameterTypeName + " " + parameterInfos[i].parameterName;
+                if (i + 1 < parameterInfos.Length)
+                {
+                    functionParams += ", ";
+                }
             }
         }
 
@@ -242,16 +298,134 @@ public class SOEventWizard : ScriptableWizard
     {
         string allParamNames = string.Empty;
 
-        for (int i = 0; i < parameterInfos.Length; ++i)
+        if (parameterInfos != null && parameterInfos.Length > 0)
         {
-            allParamNames += parameterInfos[i].parameterName;
-            if (i + 1 < parameterInfos.Length)
+            for (int i = 0; i < parameterInfos.Length; ++i)
             {
-                allParamNames += ", ";
+                allParamNames += parameterInfos[i].parameterName;
+                if (i + 1 < parameterInfos.Length)
+                {
+                    allParamNames += ", ";
+                }
             }
         }
 
         return (allParamNames);
+    }
+
+    private string BuildAllEditorParamNames()
+    {
+        string allParamNames = string.Empty;
+
+        if (parameterInfos != null && parameterInfos.Length > 0)
+        {
+            for (int i = 0; i < parameterInfos.Length; ++i)
+            {
+                allParamNames += "_" + parameterInfos[i].parameterName;
+                if (i + 1 < parameterInfos.Length)
+                {
+                    allParamNames += ", ";
+                }
+            }
+        }
+
+        return (allParamNames);
+    }
+
+    private string BuildAllEditorParamDeclarations()
+    {
+        string allParamNames = string.Empty;
+
+        if (parameterInfos != null && parameterInfos.Length > 0)
+        {
+            for (int i = 0; i < parameterInfos.Length; ++i)
+            {
+                allParamNames += "[SerializeField]";
+                allParamNames += System.Environment.NewLine + GetIndentationSpaces();
+                allParamNames += string.Format("private {0} _{1};", parameterInfos[i].parameterTypeName, parameterInfos[i].parameterName);
+                if (i + 1 < parameterInfos.Length)
+                {
+                    allParamNames += System.Environment.NewLine + GetIndentationSpaces();
+                }
+            }
+        }
+
+        return (allParamNames);
+    }
+
+    private string GetIndentationSpaces()
+    {
+        return "    ";
+    }
+
+    private bool CheckValidity()
+    {
+        return 
+            CheckEventName() &&
+            CheckParameters();
+    }
+
+    private bool CheckEventName()
+    {
+        if (string.IsNullOrEmpty(_eventName))
+        {
+            errorString = "Event name is null";
+            return (false);
+        }
+
+        return (true);
+    }
+
+    private bool CheckParameters()
+    {
+        if (parameterInfos != null && parameterInfos.Length > 0)
+        {
+            for (int i = 0; i < parameterInfos.Length; ++i)
+            {
+                if (!CheckParameter(i, parameterInfos[i]))
+                {
+                    return (false);
+                }
+            }
+        }
+        return (true);
+    }
+
+    private bool CheckParameter(int paramIndex, ParameterType parameterInfo)
+    {
+        if (string.IsNullOrEmpty(parameterInfo.parameterName))
+        {
+            errorString = string.Format("Parameter {0} - name is empty", paramIndex);
+            return (false);
+        }
+
+        if (string.IsNullOrEmpty(parameterInfo.parameterTypeName))
+        {
+            errorString = string.Format("Parameter {0} - type name is empty", paramIndex);
+            return (false);
+        }
+
+        return (true);
+    }
+
+    private string[] BuildAllPresetTypes()
+    {
+        if (_settings == null || _settings.additionalCommonTypes.Length == 0)
+        {
+            return (PresetTypes);
+        }
+
+        string[] newPresetTypes = new string[PresetTypes.Length + _settings.additionalCommonTypes.Length];
+        for (int i = 0; i < PresetTypes.Length; ++i)
+        {
+            newPresetTypes[i] = PresetTypes[i];
+        }
+        for (int i = 0; i < _settings.additionalCommonTypes.Length; ++i)
+        {
+            newPresetTypes[i + PresetTypes.Length] = _settings.additionalCommonTypes[i];
+        }
+
+        return (newPresetTypes);
     }
 
 }

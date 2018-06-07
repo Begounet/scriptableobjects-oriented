@@ -7,4 +7,8 @@ public abstract class SOEvent : ScriptableObject
     [TextArea]
     [Tooltip("Describes when your event will be called.")]
     public string description;
+
+#if UNITY_EDITOR
+    public abstract void EditorRaise();
+#endif
 }

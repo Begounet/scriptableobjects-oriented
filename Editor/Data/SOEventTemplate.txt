@@ -7,7 +7,7 @@ using UnityEngine.Events;
 public class {EventName} : SOEvent
 {
     [System.Serializable]
-    public class Event : UnityEvent<{UnityEventParams}> { }
+    public class Event : UnityEvent{UnityEventParams} { }
 
     private Event _event = new Event();
 
@@ -16,13 +16,24 @@ public class {EventName} : SOEvent
         _event.Invoke({AllParamNames});
     }
 
-    public void AddListener(UnityAction<{UnityEventParams}> listener)
+    public void AddListener(UnityAction{UnityEventParams} listener)
     {
         _event.AddListener(listener);
     }
 
-    public void RemoveListener(UnityAction<{UnityEventParams}> listener)
+    public void RemoveListener(UnityAction{UnityEventParams} listener)
     {
         _event.RemoveListener(listener);
     }
+
+#if UNITY_EDITOR
+
+    public override void EditorRaise()
+    {
+        Raise({AllEditorParamNames});
+    }
+
+    {AllEditorParamsDeclarations}
+
+#endif
 }

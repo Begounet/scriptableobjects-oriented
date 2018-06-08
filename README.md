@@ -40,3 +40,10 @@ You can :
 - Set some parameters : these parameters will be used when you click on **Raise**
 - Raise the event : it will trigger the event using the above parameters
 Raising the event is really useful to manually test isolated system.
+
+### SOEventMode Attribute
+
+You can add a `SOEventMode` attribute on your event field to explicitly tell to the world if your event will be a listener or a broadcaster.<br>
+It will allow you to be more explicit on the use of an event, visible from the Unity Inspector, next to the event field.
+- Broadcaster : ![Broadcaster icon](Editor/Resources/IconBroadcaster.png)
+- Listener : ![Listener icon](Editor/Resources/IconListener.png)

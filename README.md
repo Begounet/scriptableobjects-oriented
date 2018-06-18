@@ -63,9 +63,14 @@ Multiple basic types are available when the plugin is installed. These one are c
 They are available from the *Assets -> Create -> SO -> Create -> Atomics* menu.<br>
 
 Are supported :
-- SO Integer : simple integer
+- SO Bool
+- SO Integer
+- SO Float
+- SO String
+- SO Vector2
+- SO Vector3
+- SO Quaternion (not editable via Euler angles yet)
 - SO Integer Clamped : an integer that can be clamped by minimum, maximum or both. If both is selected, a slider will be available.
-- SO Float : simple float
 - SO Float Clamped : a float that can be clamped by minimum, maximum or both. If both is selected, a slider will be available.
 
 ![SO Integer Clamped Example](Medias~/ExSOIntegerClamped01.jpg)

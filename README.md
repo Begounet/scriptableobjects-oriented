@@ -29,7 +29,7 @@ Start by creating a new one.
 - Open the SO Event Wizard and link the settings
 - Your new types are now available among the presets
 
-## Using SO Events
+### Using SO Events
 
 Just declare your SO Event in your class, as it is a standard C# class.<br>
 You can dynamically add listener, remove listener and raise event, like in any standard event system.<br>
@@ -55,3 +55,27 @@ Examples :
 
 `[SOEventMode(SOEventActionMode.Listener)]`<br>
 `public SOMyEvent eventListener;`
+
+
+## Atomics
+
+Multiple basic types are available when the plugin is installed. These one are called "Atomics" as they are really small sized data.<br>
+They are available from the *Assets -> Create -> SO -> Create -> Atomics* menu.<br>
+
+Are supported :
+- SO Integer : simple integer
+- SO Integer Clamped : an integer that can be clamped by minimum, maximum or both. If both is selected, a slider will be available.
+- SO Float : simple float
+- SO Float Clamped : a float that can be clamped by minimum, maximum or both. If both is selected, a slider will be available.
+
+![SO Integer Clamped Example](Medias~/ExSOIntegerClamped01.jpg)
+
+## Containers
+
+Containers are available from the *Assets -> Create -> SO -> Create -> Containers* menu.<br>
+Use the wizard to create your custom container types. Once it is done, you will be able to create new ScriptableObject from it.<br>
+
+Are supported :
+- SO List : it is the equivalent of a simple List
+
+![SO List Float Clamped Example](Medias~/ExSOListFloatClamped01.jpg)

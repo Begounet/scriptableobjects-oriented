@@ -18,7 +18,7 @@ public class SOListWizard : ScriptableWizard
 
     private static string soListTemplateFileGUID;
 
-    [MenuItem("Assets/Create/SO/Create/List", priority = 1)]
+    [MenuItem("Assets/Create/SO/Create/Containers/List", priority = 1)]
     static void CreateWizard()
     {
         SOListWizard wizard = DisplayWizard<SOListWizard>("ScriptableObject List Creation Wizard", "Create");

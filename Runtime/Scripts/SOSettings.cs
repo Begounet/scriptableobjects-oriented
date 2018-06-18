@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "Settings", menuName = "SO/Create/Settings")]
+[CreateAssetMenu(fileName = "Settings", menuName = "SO/Create/Settings", order = 100)]
 public class SOSettings : ScriptableObject
 {
     /// <summary>

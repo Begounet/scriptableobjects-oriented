@@ -1,24 +1,24 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
+using UnityEditor;
 
-[CustomEditor(typeof(SOFloatClamped))]
-public class SOFloatClampedEditor : SONumericClampedEditor
+[CustomEditor(typeof(SOIntegerClamped))]
+public class SOIntegerClampedEditor : SONumericClampedEditor
 {
     protected override void DrawSlider()
     {
         SerializedProperty valueProp = serializedObject.FindProperty("_value");
         SerializedProperty minProp = serializedObject.FindProperty("min");
         SerializedProperty maxProp = serializedObject.FindProperty("max");
-        
-        EditorGUILayout.Slider(valueProp, minProp.floatValue, maxProp.floatValue);
+
+        EditorGUILayout.IntSlider(valueProp, minProp.intValue, maxProp.intValue);
     }
 
     protected override void DrawValueProperty()
     {
-        SOFloatClamped floatClamped = serializedObject.targetObject as SOFloatClamped;
+        SOIntegerClamped intClamped = serializedObject.targetObject as SOIntegerClamped;
         SerializedProperty valueProp = serializedObject.FindProperty("_value");
-        floatClamped.Value = EditorGUILayout.FloatField(valueProp.displayName, valueProp.floatValue);
+        intClamped.Value = EditorGUILayout.IntField(valueProp.displayName, valueProp.intValue);
     }
 }

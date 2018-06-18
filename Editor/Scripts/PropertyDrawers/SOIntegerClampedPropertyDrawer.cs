@@ -1,15 +1,16 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-[CustomPropertyDrawer(typeof(SOFloatClamped))]
-public class SOFloatClampedPropertyDrawer : SONumericClampedPropertyDrawer<float>
+[CustomPropertyDrawer(typeof(SOIntegerClamped))]
+public class SOIntegerClampedPropertyDrawer : SONumericClampedPropertyDrawer<float>
 {
     protected override void DrawSimpleValue(Rect position, SerializedObject objectProperty, SerializedProperty valueProp)
     {
-        SOFloatClamped floatClamped = objectProperty.targetObject as SOFloatClamped;
-        floatClamped.Value = EditorGUI.FloatField(position, GUIContent.none, floatClamped.Value);
+        SOIntegerClamped intClamped = objectProperty.targetObject as SOIntegerClamped;
+        intClamped.Value = EditorGUI.IntField(position, GUIContent.none, intClamped.Value);
     }
 
     protected override void DrawSliderMinMax(Rect position, SerializedObject objectProperty, SerializedProperty valueProp)
@@ -17,6 +18,6 @@ public class SOFloatClampedPropertyDrawer : SONumericClampedPropertyDrawer<float
         SerializedProperty minProp = objectProperty.FindProperty("min");
         SerializedProperty maxProp = objectProperty.FindProperty("max");
 
-        EditorGUI.Slider(position, valueProp, minProp.floatValue, maxProp.floatValue, GUIContent.none);
+        EditorGUI.IntSlider(position, valueProp, minProp.intValue, maxProp.intValue, GUIContent.none);
     }
 }

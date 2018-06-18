@@ -47,3 +47,11 @@ You can add a `SOEventMode` attribute on your event field to explicitly tell to 
 It will allow you to be more explicit on the use of an event, visible from the Unity Inspector, next to the event field.
 - Broadcaster : ![Broadcaster icon](Editor/Resources/IconBroadcaster.png)
 - Listener : ![Listener icon](Editor/Resources/IconListener.png)
+
+Examples :
+
+`[SOEventMode(SOEventActionMode.Broadcaster)]`<br>
+`public SOMyEvent eventBroadcaster;`
+
+`[SOEventMode(SOEventActionMode.Listener)]`<br>
+`public SOMyEvent eventListener;`

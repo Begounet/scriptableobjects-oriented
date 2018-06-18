@@ -4,8 +4,8 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-[CustomPropertyDrawer(typeof(SOFloat))]
-[CustomPropertyDrawer(typeof(SOInteger))]
+[CustomPropertyDrawer(typeof(SOFloat), true)]
+[CustomPropertyDrawer(typeof(SOInteger), true)]
 public class SOSimpleNumericPropertyDrawer : SONumericPropertyDrawer
 {
     protected override void DrawValueProperty(SerializedObject objectProperty, Rect position)

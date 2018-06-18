@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class SONumericClamped<ValueType> : SOBaseVariable
+public abstract class SONumericClamped<ValueType> : ISONumeric
 {
     public enum ClampMode
     {
@@ -57,4 +57,14 @@ public abstract class SONumericClamped<ValueType> : SOBaseVariable
     protected abstract ValueType ClampByMinimum(ValueType Min);
     protected abstract ValueType ClampByMaximum(ValueType Max);
     protected abstract ValueType Clamp(ValueType Min, ValueType Max);
+
+    public override object GetValue()
+    {
+        return (_value);
+    }
+
+    public override void SetValue(object newValue)
+    {
+        Value = (ValueType) newValue;
+    }
 }

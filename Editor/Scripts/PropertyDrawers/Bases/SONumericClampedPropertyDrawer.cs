@@ -9,8 +9,6 @@ public abstract class SONumericClampedPropertyDrawer<ValueType> : SONumericPrope
     protected override void DrawValueProperty(SerializedObject objectProperty, Rect position)
     {
         SerializedProperty modeProp = objectProperty.FindProperty("clampMode");
-        SerializedProperty minProp = objectProperty.FindProperty("min");
-        SerializedProperty maxProp = objectProperty.FindProperty("max");
         SerializedProperty valueProp = objectProperty.FindProperty("_value");
 
         SONumericClamped<ValueType>.ClampMode mode = (SONumericClamped<ValueType>.ClampMode)modeProp.enumValueIndex;

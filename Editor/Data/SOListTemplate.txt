@@ -1,0 +1,6 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+[CreateAssetMenu(fileName = "{ListName}", menuName = "SO{Category}/{ListName}")]
+public class {ListName} : SOList<{ListItemType}> {}

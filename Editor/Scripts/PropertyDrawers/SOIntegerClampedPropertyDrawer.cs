@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-[CustomPropertyDrawer(typeof(SOIntegerClamped))]
+[CustomPropertyDrawer(typeof(SOIntegerClamped), true)]
 public class SOIntegerClampedPropertyDrawer : SONumericClampedPropertyDrawer<float>
 {
     protected override void DrawSimpleValue(Rect position, SerializedObject objectProperty, SerializedProperty valueProp)

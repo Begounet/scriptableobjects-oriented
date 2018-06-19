@@ -109,6 +109,9 @@ To continue improving the use of your SO variables, you can indicate tell if you
 Changing the mode is easy. Just inspect your SO variable and set the mode.
 ![Changing SO variable mode](Medias~/ExSOVariableMode01.jpg)
 
+When the SO variable is bound in a slot, the icon is displayed.
+![See SO variable mode](Medias~/ExSOVariableDataMode01.jpg)
+
 
 ## Settings
 The settings allow to improve the SO Wizards (Events & Variables).<br>

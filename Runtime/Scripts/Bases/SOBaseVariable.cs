@@ -4,7 +4,7 @@ using UnityEngine;
 
 public enum SOVariableMode
 {
-    FixedData,
+    Constant,
     Runtime
 }
 

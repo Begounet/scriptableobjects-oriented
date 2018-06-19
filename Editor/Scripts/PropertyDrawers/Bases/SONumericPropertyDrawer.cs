@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-public abstract class SONumericPropertyDrawer : PropertyDrawer
+public abstract class SONumericPropertyDrawer : SOVariablePropertyDrawer
 {
     public override void OnGUI(UnityEngine.Rect position, UnityEditor.SerializedProperty property, UnityEngine.GUIContent label)
     {
-        position = EditorGUI.PrefixLabel(position, label);
-
+        position = DrawPrefixLabel(position, property, label);
+        
         int numControls = 1;
 
         if (property.objectReferenceValue != null)
@@ -21,23 +21,24 @@ public abstract class SONumericPropertyDrawer : PropertyDrawer
 
         if (property.objectReferenceValue != null)
         {
-            GUI.changed = false;
-            {
-                SerializedObject objectProp = new SerializedObject(property.objectReferenceValue);
-                DrawValueProperty(objectProp, position);
+            position.width -= controlsSpace;
 
-                if (GUI.changed)
-                {
-                    objectProp.ApplyModifiedProperties();
-                }
+            EditorGUI.BeginChangeCheck();
+
+            SerializedObject objectProp = new SerializedObject(property.objectReferenceValue);
+            DrawValueProperty(objectProp, position);
+
+            if (EditorGUI.EndChangeCheck())
+            {
+                objectProp.ApplyModifiedProperties();
             }
 
-            position.x += singleControlWidth;
+            position.x += singleControlWidth + controlsSpace;
         }
 
-        GUI.changed = false;
-        EditorGUI.PropertyField(position, property, GUIContent.none, false);
-        if (GUI.changed)
+        EditorGUI.BeginChangeCheck();
+        DrawVariableProperty(position, property, label);
+        if (EditorGUI.EndChangeCheck())
         {
             property.serializedObject.ApplyModifiedProperties();
         }

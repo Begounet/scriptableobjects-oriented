@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
-public abstract class SONumericClampedEditor : Editor
+public abstract class SONumericClampedEditor : SOVariableEditor
 {
     public override void OnInspectorGUI()
     {
-        base.DrawDefaultInspector();
+        base.OnInspectorGUI();
 
         SerializedProperty clampModeProp = serializedObject.FindProperty("clampMode");
 

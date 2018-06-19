@@ -52,8 +52,8 @@ public class SOEventPropertyDrawer : PropertyDrawer
     {
         _isInitialized = true;
 
-        _iconBroadcaster = Resources.Load<Texture>("IconBroadcaster");
-        _iconListener = Resources.Load<Texture>("IconListener");
+        _iconBroadcaster = SOTextureResourceManager.GetTexture(SOTextureResourceManager.Resource.IconBroadcaster);
+        _iconListener = SOTextureResourceManager.GetTexture(SOTextureResourceManager.Resource.IconListener);
     }
 
     private SOEventModeAttribute FindEventModeAttribute()

@@ -106,10 +106,10 @@ To continue improving the use of your SO variables, you can indicate tell if you
 	Every "Runtime data" should be reset (call `variable.Reset()`) at the Start (generally, by the script that will feed it).<br>
 	Examples : list of players in a multiplayer game, current score, current time, current player life etc.
 	
-Changing the mode is easy. Just inspect your SO variable and set the mode.
+Changing the mode is easy. Just inspect your SO variable and set the mode.<br>
 ![Changing SO variable mode](Medias~/ExSOVariableMode01.jpg)
 
-When the SO variable is bound in a slot, the icon is displayed.
+When the SO variable is bound in a slot, the icon is displayed.<br>
 ![See SO variable mode](Medias~/ExSOVariableDataMode01.jpg)
 
 

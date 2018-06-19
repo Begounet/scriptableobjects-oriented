@@ -85,6 +85,8 @@ Are supported :
 - *Write Only* ![Write Only Icon](Editor/Resources/IconWrite.png) : expect to be feed from the script but never read from it (like writing the result of a calculus for example)
 - *Read & Write* ![Read Write Icon](Editor/Resources/IconReadWrite.png) : expect to be read and feed by the script
 
+![Example of SO variable mode attribute](Medias~/ExSOFloatClamped01.jpg)
+
 Examples :
 
 `[SOVariableMode(SOVariableActionMode.ReadOnly)]`<br>
@@ -105,7 +107,7 @@ To continue improving the use of your SO variables, you can indicate tell if you
 	Examples : list of players in a multiplayer game, current score, current time, current player life etc.
 	
 Changing the mode is easy. Just inspect your SO variable and set the mode.
-![Changing SO variable mode](Medias~/ExSOVariableMode01.png)
+![Changing SO variable mode](Medias~/ExSOVariableMode01.jpg)
 
 
 ## Settings

@@ -21,14 +21,6 @@ Create a SO Event from scratch just to change the type of parameter or add new o
 
 You can add more types with the settings.
 
-## Settings
-The settings allow to improve the SO Event Wizard.<br>
-Start by creating a new one.
-- Assets -> Create -> SO -> Create -> Settings
-- Add additional types
-- Open the SO Event Wizard and link the settings
-- Your new types are now available among the presets
-
 ### Using SO Events
 
 Just declare your SO Event in your class, as it is a standard C# class.<br>
@@ -84,3 +76,42 @@ Are supported :
 - SO List : it is the equivalent of a simple List
 
 ![SO List Float Clamped Example](Medias~/ExSOListFloatClamped01.jpg)
+
+
+## SO Variable Mode Attribute
+To improve how your SO variables are used in your code, you can add a special attribute that will be shown in the Inspector.<br>
+Are supported :
+- *Read Only* ![Read Only Icon](Editor/Resources/IconRead.png) : expect to be used by the script but never written by it
+- *Write Only* ![Write Only Icon](Editor/Resources/IconWrite.png) : expect to be feed from the script but never read from it (like writing the result of a calculus for example)
+- *Read & Write* ![Read Write Icon](Editor/Resources/IconReadWrite.png) : expect to be read and feed by the script
+
+Examples :
+
+`[SOVariableMode(SOVariableActionMode.ReadOnly)]`<br>
+`public SOFloat numPlayers;`
+
+`[SOVariableMode(SOVariableActionMode.WriteOnly)]`<br>
+`public SOFloat result;`
+
+`[SOVariableMode(SOVariableActionMode.ReadWrite)]`<br>
+`public SOList<Player> playerList;`
+
+## Constant & Runtime
+To continue improving the use of your SO variables, you can indicate tell if you expect your SO variable to be a constant or a runtime variable.
+- *Constant* ![Constant Icon](Editor/Resources/IconConstant.png) : a fixed data that should be read only.<br>
+	Examples : the minimum & maximum player speed, the camera lerp interpolation speed.
+- *Runtime* ![Runtime Icon](Editor/Resources/IconRuntime.png) : a runtime data that should be filled during the game.<br>
+	Every "Runtime data" should be reset (call `variable.Reset()`) at the Start (generally, by the script that will feed it).<br>
+	Examples : list of players in a multiplayer game, current score, current time, current player life etc.
+	
+Changing the mode is easy. Just inspect your SO variable and set the mode.
+![Changing SO variable mode](Medias~/ExSOVariableMode01.png)
+
+
+## Settings
+The settings allow to improve the SO Wizards (Events & Variables).<br>
+Start by creating a new one.
+- Assets -> Create -> SO -> Create -> Settings
+- Add additional types
+- Open the SO Event Wizard and link the settings
+- Your new types are now available among the presets

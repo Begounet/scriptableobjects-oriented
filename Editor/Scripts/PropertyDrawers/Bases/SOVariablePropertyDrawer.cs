@@ -62,9 +62,9 @@ public class SOVariablePropertyDrawer : PropertyDrawer
     protected Rect DrawModeIcon(Rect position, SOBaseVariable baseVariable)
     {
         SOTextureResourceManager.Resource iconMode =
-            (baseVariable.mode == SOVariableMode.Constant ? SOTextureResourceManager.Resource.IconConstant : SOTextureResourceManager.Resource.IconRuntime);
+            (baseVariable.Mode == SOVariableMode.Constant ? SOTextureResourceManager.Resource.IconConstant : SOTextureResourceManager.Resource.IconRuntime);
 
-        DrawIcon(position, iconMode, baseVariable.mode.ToString());
+        DrawIcon(position, iconMode, baseVariable.Mode.ToString());
 
         position.x += iconSize;
         return (position);

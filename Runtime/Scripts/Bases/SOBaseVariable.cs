@@ -8,16 +8,24 @@ public enum SOVariableMode
     Runtime
 }
 
+/// <summary>
+/// Every SO variable should inherit from it.
+/// </summary>
 public class SOBaseVariable : ScriptableObject
 {
 #if UNITY_EDITOR
 
+    [SerializeField]
     [Tooltip("Tell explicitly if your variable purpose is to be a constant data or a value to be set during the runtime")]
-    public SOVariableMode mode;
+    private SOVariableMode mode = SOVariableMode.Constant;
 
     [TextArea]
+    [SerializeField]
     [Tooltip("Describes when your event will be called.")]
-    public string description;
+    private string description;
+
+    public SOVariableMode Mode
+    { get { return (mode); } }
 
 #endif
 

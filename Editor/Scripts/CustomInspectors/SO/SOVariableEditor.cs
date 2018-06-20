@@ -2,10 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
+using System;
 
 [CustomEditor(typeof(SOBaseVariable), true)]
 public class SOVariableEditor : Editor
 {
+    // Script +
+    // Mode +
+    // Description
+    protected const int numPropertiesInSOBaseVariable = 3;
+
     protected const int modeIconWidth = 20;
     protected const int space = 5;
 
@@ -28,6 +34,13 @@ public class SOVariableEditor : Editor
         DrawScriptHeader();
         hasChanged |= DrawMode();
         hasChanged |= DrawDescription();
+
+        if (ShouldDrawSeparation())
+        {
+            DrawSeparation();
+        }
+
+        hasChanged |= DrawOtherPropertiesIfRequired();
 
         if (hasChanged)
         {
@@ -84,6 +97,55 @@ public class SOVariableEditor : Editor
         EditorGUILayout.PropertyField(serializedObject.FindProperty("description"));
         return (GUI.changed);
     }
+    
+    private bool DrawOtherPropertiesIfRequired()
+    {
+        if (ShouldDrawDefaultProperties())
+        {
+            return (DrawDefaultProperties());
+        }
+        return (false);
+    }
 
+    protected bool ShouldDrawDefaultProperties()
+    {
+        bool drawProperties = true;
 
+        object[] attributes = target.GetType().GetCustomAttributes(typeof(SOVariablePropertyDrawAttribute), true);
+        foreach (var attribute in attributes as SOVariablePropertyDrawAttribute[])
+        {
+            drawProperties &= attribute.drawProperties;
+        }
+
+        return (drawProperties);
+    }
+
+    protected virtual bool DrawDefaultProperties()
+    {
+        SerializedProperty prop = serializedObject.GetIterator();
+
+        for (int i = 0; i < numPropertiesInSOBaseVariable; ++i)
+        {
+            prop.NextVisible(true);
+        }
+
+        EditorGUI.BeginChangeCheck();
+        while (prop.NextVisible(false))
+        {
+            EditorGUILayout.PropertyField(prop, prop.isExpanded);
+        }
+        return (EditorGUI.EndChangeCheck());
+    }
+
+    protected virtual bool ShouldDrawSeparation()
+    {
+        return (true);
+    }
+
+    protected virtual void DrawSeparation()
+    {
+        GUI.enabled = false;
+        EditorGUILayout.TextArea("", GUI.skin.horizontalSlider);
+        GUI.enabled = true;
+    }
 }

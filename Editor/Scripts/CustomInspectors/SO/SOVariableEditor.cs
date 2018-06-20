@@ -46,6 +46,8 @@ public class SOVariableEditor : Editor
         {
             serializedObject.ApplyModifiedProperties();
         }
+
+        serializedObject.UpdateIfRequiredOrScript();
     }
 
     protected virtual void  Init()

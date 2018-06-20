@@ -63,7 +63,7 @@ public class SOVariablePropertyDrawer : PropertyDrawer
         }
 
         position.width -= (numIcons * (iconSize + controlsSpace));
-
+        
         EditorGUI.PropertyField(position, property, GUIContent.none);
         position.x += position.width + controlsSpace;
         position.width = iconSize;

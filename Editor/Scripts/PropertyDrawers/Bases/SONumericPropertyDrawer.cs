@@ -7,11 +7,14 @@ public abstract class SONumericPropertyDrawer : SOVariablePropertyDrawer
 {
     public override void OnGUI(UnityEngine.Rect position, UnityEditor.SerializedProperty property, UnityEngine.GUIContent label)
     {
+        SerializedObject objectProp = new SerializedObject(property.objectReferenceValue);
+        bool shouldDrawProp = ShouldDrawProperty(objectProp);
+
         position = DrawPrefixLabel(position, property, label);
         
         int numControls = 1;
 
-        if (property.objectReferenceValue != null)
+        if (property.objectReferenceValue != null && shouldDrawProp)
         {
             numControls = 2;
         }
@@ -19,14 +22,12 @@ public abstract class SONumericPropertyDrawer : SOVariablePropertyDrawer
         float singleControlWidth = position.width / numControls;
         position.width = singleControlWidth;
 
-        if (property.objectReferenceValue != null)
+        if (property.objectReferenceValue != null && shouldDrawProp)
         {
             position.width -= controlsSpace;
 
             EditorGUI.BeginChangeCheck();
-
-            SerializedObject objectProp = new SerializedObject(property.objectReferenceValue);
-            DrawValueProperty(objectProp, position);
+            DrawValuePropertyIfRequired(objectProp, property, position);
 
             if (EditorGUI.EndChangeCheck())
             {
@@ -44,5 +45,21 @@ public abstract class SONumericPropertyDrawer : SOVariablePropertyDrawer
         }
     }
 
-    protected abstract void DrawValueProperty(SerializedObject objectProperty, Rect position);
+    void DrawValuePropertyIfRequired(SerializedObject objectProperty, SerializedProperty property, Rect position)
+    {
+        if (ShouldDrawProperty(objectProperty))
+        {
+            DrawValueProperty(objectProperty, property, position);
+        }
+    }
+
+    bool ShouldDrawProperty(SerializedObject objectProperty)
+    {
+        SerializedProperty modeProp = objectProperty.FindProperty("mode");
+        bool isForRuntime = (SOVariableMode)modeProp.enumValueIndex == SOVariableMode.Runtime;
+
+        return (!isForRuntime || Application.isPlaying);
+    }
+
+    protected abstract void DrawValueProperty(SerializedObject objectProperty, SerializedProperty property, Rect position);
 }

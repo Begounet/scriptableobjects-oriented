@@ -6,7 +6,7 @@ using UnityEngine;
 
 public abstract class SONumericClampedPropertyDrawer<ValueType> : SONumericPropertyDrawer
 {
-    protected override void DrawValueProperty(SerializedObject objectProperty, Rect position)
+    protected override void DrawValueProperty(SerializedObject objectProperty, SerializedProperty property, Rect position)
     {
         SerializedProperty modeProp = objectProperty.FindProperty("clampMode");
         SerializedProperty valueProp = objectProperty.FindProperty("_value");
@@ -25,6 +25,8 @@ public abstract class SONumericClampedPropertyDrawer<ValueType> : SONumericPrope
                 DrawSimpleValue(position, objectProperty, valueProp);
                 break;
         }
+
+        EditorUtility.SetDirty(property.serializedObject.targetObject);
     }
 
     protected abstract void DrawSimpleValue(Rect position, SerializedObject objectProperty, SerializedProperty valueProp);

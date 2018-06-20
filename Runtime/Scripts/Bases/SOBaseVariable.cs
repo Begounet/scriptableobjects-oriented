@@ -27,6 +27,9 @@ public class SOBaseVariable : ScriptableObject
     public SOVariableMode Mode
     { get { return (mode); } }
 
+    public string Description
+    { get { return (description); } }
+
 #endif
 
     public virtual void Reset() {}

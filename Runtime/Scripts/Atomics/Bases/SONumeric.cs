@@ -15,4 +15,9 @@ public class SONumeric<ValueType> : ISONumeric
     {
         Value = (ValueType) newValue;
     }
+
+    public static implicit operator ValueType(SONumeric<ValueType> v)
+    {
+        return (v.Value);
+    }
 }

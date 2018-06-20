@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
+using System;
 
 [CustomPropertyDrawer(typeof(SOBaseVariable), true)]
 public class SOVariablePropertyDrawer : PropertyDrawer
@@ -14,10 +15,33 @@ public class SOVariablePropertyDrawer : PropertyDrawer
         position = DrawPrefixLabel(position, property, label);
         DrawVariableProperty(position, property, label);
     }
-
+    
     protected virtual Rect DrawPrefixLabel(UnityEngine.Rect position, UnityEditor.SerializedProperty property, UnityEngine.GUIContent label)
     {
-        return EditorGUI.PrefixLabel(position, label);
+        string tooltip = GetTooltip(property, label);
+        position = EditorGUI.PrefixLabel(position, new GUIContent(label.text, label.image, tooltip));
+        ClearTooltip();
+        return (position);
+    }
+
+    protected virtual string GetTooltip(SerializedProperty property, GUIContent label)
+    {
+        SOBaseVariable baseVariable = property.objectReferenceValue as SOBaseVariable;
+        if (baseVariable != null && !string.IsNullOrEmpty(baseVariable.Description))
+        {
+            string tooltip = label.tooltip;
+            if (!string.IsNullOrEmpty(tooltip))
+            {
+                tooltip += "\n";
+            }
+            return tooltip + baseVariable.Description;
+        }
+        return label.tooltip;
+    }
+
+    private void ClearTooltip()
+    {
+        GUI.tooltip = string.Empty;
     }
 
     protected virtual Rect DrawVariableProperty(UnityEngine.Rect position, UnityEditor.SerializedProperty property, UnityEngine.GUIContent label)

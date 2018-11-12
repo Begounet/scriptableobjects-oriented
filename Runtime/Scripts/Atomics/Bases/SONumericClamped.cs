@@ -29,12 +29,9 @@ public abstract class SONumericClamped<ValueType> : ISONumeric
         get { return _value; }
         set
         {
+            _value = value;
             switch (clampMode)
             {
-                case ClampMode.Unclamped:
-                    _value = value;
-                    break;
-
                 case ClampMode.Minimum:
                     _value = ClampByMaximum(min);
                     break;
@@ -48,7 +45,6 @@ public abstract class SONumericClamped<ValueType> : ISONumeric
                     break;
 
                 default:
-                    _value = value;
                     break;
             }
         }

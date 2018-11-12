@@ -7,8 +7,14 @@ public abstract class SONumericPropertyDrawer : SOVariablePropertyDrawer
 {
     public override void OnGUI(UnityEngine.Rect position, UnityEditor.SerializedProperty property, UnityEngine.GUIContent label)
     {
-        SerializedObject objectProp = new SerializedObject(property.objectReferenceValue);
-        bool shouldDrawProp = ShouldDrawProperty(objectProp);
+        bool shouldDrawProp = false;
+        SerializedObject objectProp = null;
+
+        if (property.objectReferenceValue != null)
+        {
+            objectProp = new SerializedObject(property.objectReferenceValue);
+            shouldDrawProp = ShouldDrawProperty(objectProp);
+        }
 
         position = DrawPrefixLabel(position, property, label);
         

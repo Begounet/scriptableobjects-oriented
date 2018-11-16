@@ -19,4 +19,10 @@ public class SOFloatClamped : SONumericClamped<float>
     {
         return Mathf.Clamp(Value, Min, Max);
     }
+
+    public override void Reset()
+    {
+        base.Reset();
+        Value = 0.0f;
+    }
 }

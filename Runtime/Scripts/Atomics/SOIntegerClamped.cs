@@ -19,5 +19,11 @@ public class SOIntegerClamped : SONumericClamped<int>
     {
         return Mathf.Clamp(Value, Min, Max);
     }
+
+    public override void Reset()
+    {
+        base.Reset();
+        Value = 0;
+    }
 }
 

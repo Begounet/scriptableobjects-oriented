@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "SOWBool", menuName = "SO/Watchables/Bool")]
-public class SOWBool : SOBaseVariable
+public class SOWBool : SOBaseVariable, SOIBool
 {
     public Action<bool> onValueChanged;
 
@@ -51,6 +51,16 @@ public class SOWBool : SOBaseVariable
             _value = _cachedValue; // Restore old value
             Value = newValue; // Update the value in the way we want
         }
+    }
+
+    public void SetValue(bool newValue)
+    {
+        Value = newValue;
+    }
+
+    public bool GetValue()
+    {
+        return Value;
     }
 
 #endif

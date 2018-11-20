@@ -53,7 +53,7 @@ public class UITextSync : MonoBehaviour
         if (variables != null && variables.Length > 0)
         {
             // Allocate only if required
-            if (_cachedObjects.Length != variables.Length)
+            if (_cachedObjects == null || _cachedObjects.Length != variables.Length)
             {
                 _cachedObjects = new object[variables.Length];
             }

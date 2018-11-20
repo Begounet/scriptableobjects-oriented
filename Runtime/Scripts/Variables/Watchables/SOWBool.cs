@@ -9,8 +9,6 @@ public class SOWBool : SOBool, ISOWatchable
     public event Action<ISOWatchable> onSOChanged;
     public Action<bool> onValueChanged;
 
-    [SerializeField]
-    private bool _value;
     public override bool Value
     {
         get { return _value; }

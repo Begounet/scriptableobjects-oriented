@@ -9,8 +9,6 @@ public class SOWFloat : SOFloat, ISOWatchable
     public event Action<ISOWatchable> onSOChanged;
     public Action<float> onValueChanged;
 
-    [SerializeField]
-    private float _value;
     public override float Value
     {
         get { return _value; }

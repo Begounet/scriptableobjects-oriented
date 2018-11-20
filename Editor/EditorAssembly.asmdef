@@ -1,0 +1,12 @@
+{
+    "name": "scriptableobject.oriented.editor",
+    "references": [
+        "scriptableobject.oriented"
+    ],
+    "optionalUnityReferences": [],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false
+}

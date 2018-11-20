@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEditor;
 
 [CustomPropertyDrawer(typeof(SOEvent), true)]
-public class SOEventPropertyDrawer : PropertyDrawer
+internal class SOEventPropertyDrawer : PropertyDrawer
 {
     private const float ActionModeWidth = 20;
     private const float Space = 5;

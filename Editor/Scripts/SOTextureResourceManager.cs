@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SOTextureResourceManager
+internal class SOTextureResourceManager
 {
-    public enum Resource
+    internal enum Resource
     {
         IconBackground,
 
@@ -19,7 +19,7 @@ public class SOTextureResourceManager
         IconReadWrite,
     }
 
-    public static SOTextureResourceManager Instance
+    internal static SOTextureResourceManager Instance
     {
         get
         {
@@ -52,7 +52,7 @@ public class SOTextureResourceManager
         _loadedTexture.Add(Resource.IconReadWrite, Resources.Load<Texture>("IconReadWrite"));
     }
 
-    public static Texture  GetTexture(Resource resource)
+    internal static Texture  GetTexture(Resource resource)
     {
         Texture texture;
         if (Instance._loadedTexture.TryGetValue(resource, out texture))

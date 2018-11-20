@@ -5,7 +5,7 @@ using UnityEditor;
 using System;
 
 [CustomPropertyDrawer(typeof(SOBaseVariable), true)]
-public class SOVariablePropertyDrawer : PropertyDrawer
+internal class SOVariablePropertyDrawer : PropertyDrawer
 {
     protected const int iconSize = 20;
     protected const int controlsSpace = 3;

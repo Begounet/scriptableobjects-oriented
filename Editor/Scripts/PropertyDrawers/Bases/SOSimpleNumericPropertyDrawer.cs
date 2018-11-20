@@ -6,7 +6,7 @@ using UnityEngine;
 
 [CustomPropertyDrawer(typeof(SOFloat), true)]
 [CustomPropertyDrawer(typeof(SOInteger), true)]
-public class SOSimpleNumericPropertyDrawer : SONumericPropertyDrawer
+internal class SOSimpleNumericPropertyDrawer : SONumericPropertyDrawer
 {
     protected override void DrawValueProperty(SerializedObject objectProperty, SerializedProperty property, Rect position)
     {

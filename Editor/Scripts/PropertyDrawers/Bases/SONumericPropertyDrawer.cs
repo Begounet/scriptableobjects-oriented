@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-public abstract class SONumericPropertyDrawer : SOVariablePropertyDrawer
+internal abstract class SONumericPropertyDrawer : SOVariablePropertyDrawer
 {
     public override void OnGUI(UnityEngine.Rect position, UnityEditor.SerializedProperty property, UnityEngine.GUIContent label)
     {

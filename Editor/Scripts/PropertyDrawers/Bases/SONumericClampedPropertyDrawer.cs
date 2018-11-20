@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-public abstract class SONumericClampedPropertyDrawer<ValueType> : SONumericPropertyDrawer
+internal abstract class SONumericClampedPropertyDrawer<ValueType> : SONumericPropertyDrawer
 {
     protected override void DrawValueProperty(SerializedObject objectProperty, SerializedProperty property, Rect position)
     {

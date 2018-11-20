@@ -3,14 +3,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "SOWBool", menuName = "SO/Watchables/Bool")]
-public class SOWBool : SOBaseVariable, SOIBool
+[CreateAssetMenu(fileName = "SOWBool", menuName = "SO/Atomics/Bool/Watchable", order = 1)]
+public class SOWBool : SOBool, ISOWatchable
 {
+    public event Action<ISOWatchable> onSOChanged;
     public Action<bool> onValueChanged;
 
     [SerializeField]
     private bool _value;
-    public bool Value
+    public override bool Value
     {
         get { return _value; }
         set
@@ -24,14 +25,9 @@ public class SOWBool : SOBaseVariable, SOIBool
 #endif
 
                 EventHelper.Raise(onValueChanged, _value);
+                EventHelper.Raise(onSOChanged, this);
             }
         }
-    }
-
-    public override void Reset()
-    {
-        base.Reset();
-        Value = false;
     }
 
 #if UNITY_EDITOR
@@ -51,16 +47,6 @@ public class SOWBool : SOBaseVariable, SOIBool
             _value = _cachedValue; // Restore old value
             Value = newValue; // Update the value in the way we want
         }
-    }
-
-    public void SetValue(bool newValue)
-    {
-        Value = newValue;
-    }
-
-    public bool GetValue()
-    {
-        return Value;
     }
 
 #endif

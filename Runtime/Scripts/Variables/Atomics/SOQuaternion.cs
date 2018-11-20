@@ -12,4 +12,9 @@ public class SOQuaternion : SOBaseVariable
         base.Reset();
         value = Quaternion.identity;
     }
+
+    public override object GetObject()
+    {
+        return value;
+    }
 }

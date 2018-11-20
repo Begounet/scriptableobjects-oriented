@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class SONumeric<ValueType> : ISONumeric
 {
-    public ValueType Value;
+    public virtual ValueType Value { get; set; }
 
     public override object GetValue()
     {
@@ -19,5 +19,10 @@ public class SONumeric<ValueType> : ISONumeric
     public static implicit operator ValueType(SONumeric<ValueType> v)
     {
         return (v.Value);
+    }
+
+    public override object GetObject()
+    {
+        return Value;
     }
 }

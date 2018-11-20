@@ -63,4 +63,9 @@ public abstract class SONumericClamped<ValueType> : ISONumeric
     {
         Value = (ValueType) newValue;
     }
+
+    public override object GetObject()
+    {
+        return Value;
+    }
 }

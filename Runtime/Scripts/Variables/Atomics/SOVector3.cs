@@ -12,4 +12,9 @@ public class SOVector3 : SOBaseVariable
         base.Reset();
         value = Vector3.zero;
     }
+
+    public override object GetObject()
+    {
+        return value;
+    }
 }

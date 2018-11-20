@@ -12,4 +12,9 @@ public class SOString : SOBaseVariable
         base.Reset();
         value = null;
     }
+
+    public override object GetObject()
+    {
+        return value;
+    }
 }

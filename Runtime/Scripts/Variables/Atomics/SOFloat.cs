@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "SOFloat", menuName = "SO/Atomics/Float")]
+[CreateAssetMenu(fileName = "SOFloat", menuName = "SO/Atomics/Float/Simple", order = 0)]
 public class SOFloat : SONumeric<float>, ISOFloat
 {
     public override void Reset()
     {
         base.Reset();
-        Value = 0.0f;
+        Set(0.0f);
     }
 
     public float Get()
@@ -18,6 +18,6 @@ public class SOFloat : SONumeric<float>, ISOFloat
 
     public void Set(float newValue)
     {
-        Value = newValue;
+        SetValue(newValue);
     }
 }

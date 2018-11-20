@@ -33,4 +33,8 @@ public class SOBaseVariable : ScriptableObject
 #endif
 
     public virtual void Reset() {}
+
+    // Can be overriden to return the main object contained
+    // in the scriptable object.
+    public virtual object GetObject() { return this; }
 }

@@ -10,7 +10,7 @@ internal class SOSimpleNumericPropertyDrawer : SONumericPropertyDrawer
 {
     protected override void DrawValueProperty(SerializedObject objectProperty, SerializedProperty property, Rect position)
     {
-        SerializedProperty valueProp = objectProperty.FindProperty("Value");
+        SerializedProperty valueProp = objectProperty.FindProperty("_value");
         EditorGUI.PropertyField(position, valueProp, GUIContent.none, false);
 
         EditorUtility.SetDirty(property.serializedObject.targetObject);

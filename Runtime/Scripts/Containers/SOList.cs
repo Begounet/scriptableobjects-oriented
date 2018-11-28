@@ -8,6 +8,15 @@ public class SOList<ItemType> : SOBaseVariable
 
     public void Add(ItemType item)
     {
+        InitIFN();
         list.Add(item);
+    }
+
+    private void InitIFN()
+    {
+        if (list == null)
+        {
+            list = new List<ItemType>();
+        }
     }
 }

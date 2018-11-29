@@ -21,6 +21,12 @@ public class SOSimpleEvent : SOEvent
         _event.AddListener(listener);
     }
 
+    public void AddUniqueListener(UnityAction listener)
+    {
+        RemoveListener(listener);
+        AddListener(listener);
+    }
+
     public void RemoveListener(UnityAction listener)
     {
         _event.RemoveListener(listener);

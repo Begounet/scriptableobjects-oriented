@@ -21,6 +21,12 @@ public class {EventName} : SOEvent
         _event.AddListener(listener);
     }
 
+	 public void AddUniqueListener(UnityAction{UnityEventParams} listener)
+    {
+		RemoveListener(listener);
+		AddListener(listener);
+    }
+
     public void RemoveListener(UnityAction{UnityEventParams} listener)
     {
         _event.RemoveListener(listener);

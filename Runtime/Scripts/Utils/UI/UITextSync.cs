@@ -24,8 +24,11 @@ public class UITextSync : MonoBehaviour
             for (int i = 0; i < variables.Length; ++i)
             {
                 ISOWatchable watchableVariable = variables[i] as ISOWatchable;
-                watchableVariable.onSOChanged -= OnSOVariableChanged; // Assure to subscribe only once
-                watchableVariable.onSOChanged += OnSOVariableChanged;
+                if (watchableVariable != null)
+                {
+                    watchableVariable.onSOChanged -= OnSOVariableChanged; // Assure to subscribe only once
+                    watchableVariable.onSOChanged += OnSOVariableChanged;
+                }
             }
         }
     }

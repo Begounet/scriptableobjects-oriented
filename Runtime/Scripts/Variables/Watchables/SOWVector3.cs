@@ -21,8 +21,8 @@ public class SOWVector3 : SOVector3, ISOWatchable
             _cachedValue = value;
 #endif
 
-            EventHelper.Raise(onValueChanged, value);
-            EventHelper.Raise(onSOChanged, this);
+            SO.EventHelper.Raise(onValueChanged, value);
+            SO.EventHelper.Raise(onSOChanged, this);
         }
     }
 

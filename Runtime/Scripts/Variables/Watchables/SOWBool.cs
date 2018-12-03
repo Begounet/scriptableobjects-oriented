@@ -22,8 +22,8 @@ public class SOWBool : SOBool, ISOWatchable
                 _cachedValue = _value;
 #endif
 
-                EventHelper.Raise(onValueChanged, _value);
-                EventHelper.Raise(onSOChanged, this);
+                SO.EventHelper.Raise(onValueChanged, _value);
+                SO.EventHelper.Raise(onSOChanged, this);
             }
         }
     }

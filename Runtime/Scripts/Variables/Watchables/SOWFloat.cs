@@ -16,8 +16,8 @@ public class SOWFloat : SOFloat, ISOWatchable
         set
         {
             _value = value;
-            EventHelper.Raise(onValueChanged, _value);
-            EventHelper.Raise(onSOChanged, this);
+            SO.EventHelper.Raise(onValueChanged, _value);
+            SO.EventHelper.Raise(onSOChanged, this);
         }
     }
 

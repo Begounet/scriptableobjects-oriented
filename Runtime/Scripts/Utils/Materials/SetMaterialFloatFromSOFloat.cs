@@ -158,7 +158,7 @@ public class SetMaterialFloatFromSOFloat : MonoBehaviour
             (!Application.isPlaying && _shouldUpdateInEditor);
 #endif
 
-        if (shouldUpdate)
+        if (shouldUpdate || IsTransitionAnimating)
         {
             UpdateMaterialPropertyValue();
         }
@@ -192,8 +192,11 @@ public class SetMaterialFloatFromSOFloat : MonoBehaviour
     {
         Material material = meshRenderer.sharedMaterials[_materialIndex];
         float currentValue = material.GetFloat(_propertyId);
-        currentValue = Mathf.SmoothDamp(currentValue, _floatValue.Value, ref _currentVelocity, _transitionSmoothTime);
+        float targetValue = _floatValue.Value;
+        currentValue = Mathf.SmoothDamp(currentValue, targetValue, ref _currentVelocity, _transitionSmoothTime);
         SetMaterialPropertyValue(currentValue);
+
+        IsTransitionAnimating = !Mathf.Approximately(currentValue, targetValue);
     }
 
     void SetMaterialPropertyValue(float value)

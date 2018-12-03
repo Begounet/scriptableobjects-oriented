@@ -86,7 +86,7 @@ public class SetMaterialFloatFromSOFloat : MonoBehaviour
     public bool IsTransitionAnimating { get; private set; }
 
     private int _propertyId;
-    private float _currentVelocity;
+    private float _currentVelocity = 0.0f;
 
     private void Awake()
     {
@@ -153,7 +153,9 @@ public class SetMaterialFloatFromSOFloat : MonoBehaviour
         bool shouldUpdate = _shouldUpdateEachFrame;
 
 #if UNITY_EDITOR
-        shouldUpdate = (!Application.isPlaying && _shouldUpdateInEditor);
+        shouldUpdate = 
+            (Application.isPlaying && _shouldUpdateEachFrame) ||
+            (!Application.isPlaying && _shouldUpdateInEditor);
 #endif
 
         if (shouldUpdate)
@@ -169,9 +171,9 @@ public class SetMaterialFloatFromSOFloat : MonoBehaviour
             return;
         }
 
-        if (isActiveAndEnabled && _useAnimatedTransition && !IsTransitionAnimating)
+        if (_useAnimatedTransition)
         {
-            StartCoroutine(Coroutine_UpdateMaterialPropertyValueAnimated());
+            UpdateMaterialPropertyValueAnimated();
         }
         else
         {
@@ -186,24 +188,12 @@ public class SetMaterialFloatFromSOFloat : MonoBehaviour
             _materialIndex < meshRenderer.sharedMaterials.Length;
     }
 
-    IEnumerator Coroutine_UpdateMaterialPropertyValueAnimated()
+    void UpdateMaterialPropertyValueAnimated()
     {
-        IsTransitionAnimating = true;
-        {
-            Material material = meshRenderer.sharedMaterials[_materialIndex];
-            float currentValue = material.GetFloat(_propertyId);
-            _currentVelocity = 0.0f;
-
-            while (!Mathf.Approximately(currentValue, _floatValue.Value))
-            {
-                currentValue = Mathf.SmoothDamp(currentValue, _floatValue.Value, ref _currentVelocity, _transitionSmoothTime);
-                SetMaterialPropertyValue(currentValue);
-                yield return null;
-            }
-
-            SetMaterialPropertyValue(_floatValue.Value);
-        }
-        IsTransitionAnimating = false;
+        Material material = meshRenderer.sharedMaterials[_materialIndex];
+        float currentValue = material.GetFloat(_propertyId);
+        currentValue = Mathf.SmoothDamp(currentValue, _floatValue.Value, ref _currentVelocity, _transitionSmoothTime);
+        SetMaterialPropertyValue(currentValue);
     }
 
     void SetMaterialPropertyValue(float value)

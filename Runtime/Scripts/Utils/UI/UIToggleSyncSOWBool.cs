@@ -7,68 +7,28 @@ using UnityEngine.UI;
 /// <summary>
 /// Synchronize a UnityEngine.UI.Toggle with a SOWBool
 /// </summary>
-public class UIToggleSyncSOWBool : MonoBehaviour
+public class UIToggleSyncSOWBool : UIToggleSynchronizer
 {
     [SOVariableMode(SOVariableActionMode.ReadWrite)]
     public SOWBool soBoolean;
-    public Toggle toggle;
-
-	void Start ()
+    
+    public override ISOWatchable GetWatchableObject()
     {
-        SyncSOWBoolToToggle();
-        soBoolean.onValueChanged += OnBoolValueChanged;
-        toggle.onValueChanged.AddListener(OnToggleValueChanged);
+        return soBoolean;
     }
 
-    private void OnToggleValueChanged(bool newValue)
+    protected override void SyncToggleToSOValue()
     {
-        SyncToggleToSOWBool();
+        soBoolean.Value = toggle.isOn;
     }
 
-    private void OnBoolValueChanged(bool newValue)
+    protected override void SyncSOValueToToggle()
     {
-        SyncSOWBoolToToggle();
+        toggle.isOn = soBoolean.Value;
     }
 
-#if UNITY_EDITOR
-    private void OnValidate()
-    {
-        if (AreDataValid())
-        {
-            // Watch the evolution of the asset so we can sync in editor!
-
-            // Assure to subscribe only once
-            soBoolean.onValueChanged -= OnBoolValueChanged;
-            soBoolean.onValueChanged += OnBoolValueChanged;
-        }
-
-        SyncSOWBoolToToggle();
-    }
-#endif
-
-    void SyncSOWBoolToToggle()
-    {
-        if (AreDataValid() && !IsSynchronized())
-        {
-            toggle.isOn = soBoolean.Value;
-        }
-    }
-
-    void SyncToggleToSOWBool()
-    {
-        if (AreDataValid() && !IsSynchronized())
-        {
-            soBoolean.Value = toggle.isOn;
-        }
-    }
-
-    bool IsSynchronized()
+    protected override bool IsSynchronized()
     {
         return soBoolean.Value == toggle.isOn;
-    }
-
-    bool AreDataValid()
-    {
-        return soBoolean != null && toggle != null;
     }
 }

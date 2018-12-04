@@ -5,13 +5,15 @@ using UnityEngine;
 namespace SO
 {
     [System.AttributeUsage(System.AttributeTargets.Field, Inherited = true)]
-    public class ShowOnlyIfTrueAttribute : PropertyAttribute
+    public class ShowOnlyIfAttribute : PropertyAttribute
     {
         public string propertyDependencyName;
+        public bool expectedValue = true;
 
-        public ShowOnlyIfTrueAttribute(string PropertyDependencyName)
+        public ShowOnlyIfAttribute(string PropertyDependencyName, bool ExpectedValue = true)
         {
             propertyDependencyName = PropertyDependencyName;
+            expectedValue = ExpectedValue;
         }
     }
 }

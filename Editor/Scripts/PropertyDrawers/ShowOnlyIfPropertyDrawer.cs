@@ -5,8 +5,8 @@ using UnityEngine;
 
 namespace SO
 {
-    [CustomPropertyDrawer(typeof(ShowOnlyIfTrueAttribute))]
-    public class ShowOnlyIfTruePropertyDrawer : PropertyDrawer
+    [CustomPropertyDrawer(typeof(ShowOnlyIfAttribute))]
+    public class ShowOnlyIfPropertyDrawer : PropertyDrawer
     {
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
@@ -28,9 +28,9 @@ namespace SO
 
         private bool ShouldShowProperty(SerializedProperty property)
         {
-            ShowOnlyIfTrueAttribute showOnlyIfTrueAttribute = attribute as ShowOnlyIfTrueAttribute;
+            ShowOnlyIfAttribute showOnlyIfTrueAttribute = attribute as ShowOnlyIfAttribute;
             SerializedProperty dependencyProperty = property.serializedObject.FindProperty(showOnlyIfTrueAttribute.propertyDependencyName);
-            return (dependencyProperty == null || dependencyProperty.boolValue);
+            return (dependencyProperty == null || dependencyProperty.boolValue == showOnlyIfTrueAttribute.expectedValue);
         }
     }
 }

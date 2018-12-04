@@ -64,7 +64,7 @@ public class SetMaterialFloatFromSOFloat : MonoBehaviour
     }
 
     [SerializeField]
-    [SO.ShowOnlyIfTrue("_useAnimatedTransition")]
+    [SO.ShowOnlyIf("_useAnimatedTransition")]
     private float _transitionSmoothTime;
     public float TransitionSmoothTime
     {
@@ -75,7 +75,7 @@ public class SetMaterialFloatFromSOFloat : MonoBehaviour
     [SerializeField]
     [SOVariableMode(SOVariableActionMode.WriteOnly)]
     [Tooltip("Optional - If the transition is animated, the current value will be saved into it")]
-    [SO.ShowOnlyIfTrue("_useAnimatedTransition")]
+    [SO.ShowOnlyIf("_useAnimatedTransition")]
     private SOFloat _animatedFloatValue;
     public SOFloat AnimatedFloatValue
     {

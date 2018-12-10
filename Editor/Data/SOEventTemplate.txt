@@ -32,6 +32,18 @@ public class {EventName} : SOEvent
         _event.RemoveListener(listener);
     }
 
+	public void SubscribeListener(UnityAction{UnityEventParams} listener, bool shouldListen)
+	{
+		if (shouldListen)
+		{
+			AddListener(listener);
+		}
+		else
+		{
+			RemoveListener(listener);
+		}
+	}
+
 #if UNITY_EDITOR
 
     public override void EditorRaise()

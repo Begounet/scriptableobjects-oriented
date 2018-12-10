@@ -18,17 +18,21 @@ public class SOBaseVariable : ScriptableObject
     [SerializeField]
     [Tooltip("Tell explicitly if your variable purpose is to be a constant data or a value to be set during the runtime")]
     private SOVariableMode mode = SOVariableMode.Constant;
+    public SOVariableMode Mode
+    {
+        get { return (mode); }
+        set { mode = value; }
+    }
 
     [TextArea]
     [SerializeField]
     [Tooltip("Describes when your event will be called.")]
     private string description;
-
-    public SOVariableMode Mode
-    { get { return (mode); } }
-
     public string Description
-    { get { return (description); } }
+    {
+        get { return (description); }
+        set { description = value; }
+    }
 
 #endif
 

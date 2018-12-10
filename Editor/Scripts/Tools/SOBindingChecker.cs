@@ -33,24 +33,7 @@ public class SOBindingChecker
             }
             else if (obj is GameObject)
             {
-                bool isGameObjectMissingBinding = false;
-
-                GameObject go = obj as GameObject;
-                Component[] components = go.GetComponents<Component>();
-                for (int componentIndex = 0; componentIndex < components.Length; ++componentIndex)
-                {
-                    Component comp = components[componentIndex];
-                    if (IsBindingMissing(comp, ref missingBindings))
-                    {
-                        isGameObjectMissingBinding = true;
-                        Debug.LogWarningFormat(go, "Missing binding on GameObject({0}), Component({1}) - [{2}]", go.name, comp, JoinStringListAsOneString(missingBindings));
-                    }
-                }
-
-                if (isGameObjectMissingBinding)
-                {
-                    objectsWithMissingBinding.Add(go);
-                }
+                CheckSOBindingForGameObjectAndChildren(obj as GameObject, objectsWithMissingBinding, missingBindings);
             }
         }
 
@@ -62,6 +45,33 @@ public class SOBindingChecker
         else
         {
             Debug.Log("All required bindings are correctly set. Enjoy!");
+        }
+    }
+
+    private static void CheckSOBindingForGameObjectAndChildren(GameObject rootGameObject, List<Object> objectsWithMissingBinding, List<string> missingBindings)
+    {
+        bool isGameObjectMissingBinding = false;
+        
+        Component[] components = rootGameObject.GetComponents<Component>();
+        for (int componentIndex = 0; componentIndex < components.Length; ++componentIndex)
+        {
+            Component comp = components[componentIndex];
+            if (IsBindingMissing(comp, ref missingBindings))
+            {
+                isGameObjectMissingBinding = true;
+                Debug.LogWarningFormat(rootGameObject, "Missing binding on GameObject({0}), Component({1}) - [{2}]", rootGameObject.name, comp, JoinStringListAsOneString(missingBindings));
+            }
+        }
+
+        if (isGameObjectMissingBinding)
+        {
+            objectsWithMissingBinding.Add(rootGameObject);
+        }
+
+        // Check children too
+        for (int childIdx = 0; childIdx < rootGameObject.transform.childCount; ++childIdx)
+        {
+            CheckSOBindingForGameObjectAndChildren(rootGameObject.transform.GetChild(childIdx).gameObject, objectsWithMissingBinding, missingBindings);
         }
     }
 

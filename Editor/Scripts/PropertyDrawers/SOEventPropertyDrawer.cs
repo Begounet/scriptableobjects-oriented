@@ -40,8 +40,33 @@ internal class SOEventPropertyDrawer : PropertyDrawer
                 if (attributes.Length > 0)
                 {
                     SOEventModeAttribute eventModeAttribute = attributes[0] as SOEventModeAttribute;
-                    Texture selectedIcon = (eventModeAttribute.mode == SOEventActionMode.Broadcaster) ? _iconBroadcaster : _iconListener;
-                    GUI.DrawTexture(position, selectedIcon, ScaleMode.ScaleToFit, true, 1.0f);
+
+                    string tooltip;
+                    Texture selectedIcon;
+
+                    switch (eventModeAttribute.mode)
+                    {
+                        case SOEventActionMode.Broadcaster:
+                            tooltip = "Broadcaster";
+                            selectedIcon = _iconBroadcaster;
+                            break;
+
+                        case SOEventActionMode.Listener:
+                            tooltip = "Listener";
+                            selectedIcon = _iconListener;
+                            break;
+
+                        default:
+                            tooltip = string.Empty;
+                            selectedIcon = null;
+                            break;
+                    }
+
+                    if (selectedIcon != null)
+                    {
+                        GUI.DrawTexture(position, selectedIcon, ScaleMode.ScaleToFit, true, 1.0f);
+                        GUI.Label(position, new GUIContent("", tooltip));
+                    }
                 }
             }
         }

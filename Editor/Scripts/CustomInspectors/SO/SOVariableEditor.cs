@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEditor;
 using System;
 
+[CanEditMultipleObjects]
 [CustomEditor(typeof(SOBaseVariable), true)]
 public class SOVariableEditor : Editor
 {

@@ -32,6 +32,12 @@ public class SOSimpleEvent : SOEvent
         _event.RemoveListener(listener);
     }
 
+    public void Subscribe(UnityAction listener, bool subscribe)
+    {
+        if (subscribe) AddListener(listener);
+        else RemoveListener(listener);
+    }
+
 #if UNITY_EDITOR
 
     public override void EditorRaise()

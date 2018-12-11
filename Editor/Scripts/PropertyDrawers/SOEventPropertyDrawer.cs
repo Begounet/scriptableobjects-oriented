@@ -27,7 +27,7 @@ internal class SOEventPropertyDrawer : PropertyDrawer
 
             if (shouldDisplayActionMode)
             {
-                position.width -= ActionModeWidth;
+                position.width -= (ActionModeWidth + Space);
             }
             EditorGUI.PropertyField(position, property);
 

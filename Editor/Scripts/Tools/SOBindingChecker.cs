@@ -1,10 +1,12 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEditor;
 using UnityEngine;
 
 /// <summary>
-/// Check if the field requiering binding (with attribute SOBindingType) is correctly set on selected ScriptableObjects and GameObject components
+/// Check if the field requiering binding (with attribute [SOBindingType]) is correctly set on selected ScriptableObjects and GameObject components
 /// </summary>
 public class SOBindingChecker
 {
@@ -17,24 +19,13 @@ public class SOBindingChecker
     [MenuItem("Assets/SO/Check required bindings")]
     private static void CheckSOBinding()
     {
-        List<Object> objectsWithMissingBinding = new List<Object>();
+        List<UnityEngine.Object> objectsWithMissingBinding = new List<UnityEngine.Object>();
         List<string> missingBindings = new List<string>();
 
         for (int objectIndex = 0; objectIndex < Selection.objects.Length; ++objectIndex)
         {
             UnityEngine.Object obj = Selection.objects[objectIndex];
-            if (obj is ScriptableObject)
-            {
-                if (IsBindingMissing(obj, ref missingBindings))
-                {
-                    objectsWithMissingBinding.Add(obj);
-                    Debug.LogWarningFormat(obj, "Missing binding on ScriptableObject({0}) - [{1}]", obj.name, JoinStringListAsOneString(missingBindings));
-                }                
-            }
-            else if (obj is GameObject)
-            {
-                CheckSOBindingForGameObjectAndChildren(obj as GameObject, objectsWithMissingBinding, missingBindings);
-            }
+            CheckSOBindingForUnityObject(obj, ref missingBindings, ref objectsWithMissingBinding);
         }
 
         if (objectsWithMissingBinding.Count > 0)
@@ -48,7 +39,47 @@ public class SOBindingChecker
         }
     }
 
-    private static void CheckSOBindingForGameObjectAndChildren(GameObject rootGameObject, List<Object> objectsWithMissingBinding, List<string> missingBindings)
+    private static void CheckSOBindingForUnityObject(UnityEngine.Object obj, ref List<string> missingBindings, ref List<UnityEngine.Object> objectsWithMissingBinding)
+    {
+        if (obj is ScriptableObject)
+        {
+            if (IsBindingMissing(obj, ref missingBindings))
+            {
+                objectsWithMissingBinding.Add(obj);
+                Debug.LogWarningFormat(obj, "Missing binding on ScriptableObject({0}) - [{1}]", obj.name, JoinStringListAsOneString(missingBindings));
+            }                
+        }
+        else if (obj is GameObject)
+        {
+            CheckSOBindingForGameObjectAndChildren(obj as GameObject, objectsWithMissingBinding, missingBindings);
+        }
+        else if (obj is DefaultAsset)
+        {
+            string assetPath = AssetDatabase.GetAssetPath(obj);
+            if (Directory.Exists(assetPath))
+            {
+                CheckSOBindingForSOInDirectoryRecursively(assetPath, ref missingBindings, ref objectsWithMissingBinding);
+            }
+        }
+    }
+
+    private static void CheckSOBindingForSOInDirectoryRecursively(string directoryPath, ref List<string> missingBindings, ref List<UnityEngine.Object> objectsWithMissingBinding)
+    {
+        string[] assetPaths = Directory.GetFiles(directoryPath);
+        for (int i = 0; i < assetPaths.Length; ++i)
+        {
+            ScriptableObject scriptableObject = AssetDatabase.LoadAssetAtPath<ScriptableObject>(assetPaths[i]);
+            CheckSOBindingForUnityObject(scriptableObject, ref missingBindings, ref objectsWithMissingBinding);
+        }
+
+        string[] subDirectories = Directory.GetDirectories(directoryPath);
+        for (int i = 0; i < subDirectories.Length; ++i)
+        {
+            CheckSOBindingForSOInDirectoryRecursively(subDirectories[i], ref missingBindings, ref objectsWithMissingBinding);
+        }
+    }
+
+    private static void CheckSOBindingForGameObjectAndChildren(GameObject rootGameObject, List<UnityEngine.Object> objectsWithMissingBinding, List<string> missingBindings)
     {
         bool isGameObjectMissingBinding = false;
         
@@ -86,8 +117,8 @@ public class SOBindingChecker
     {
         for (int i = 0; i < Selection.objects.Length; ++i)
         {
-            if (Selection.objects[i] is ScriptableObject || 
-                Selection.objects[i] is GameObject)
+            if (IsAssetValidForSOBindingCheck(Selection.objects[i]) || 
+                (Selection.objects[i] is DefaultAsset && DoesDirectoryContainsValidAssetForSOBindingCheck(Selection.objects[i])))
             {
                 return true;
             }
@@ -95,7 +126,48 @@ public class SOBindingChecker
         return false;
     }
 
-    private static bool IsBindingMissing(Object obj, ref List<string> missingBindingFields)
+    private static bool IsAssetValidForSOBindingCheck(UnityEngine.Object obj)
+    {
+        return (obj is ScriptableObject || obj is GameObject);
+    }
+
+    private static bool DoesDirectoryContainsValidAssetForSOBindingCheck(UnityEngine.Object obj)
+    {
+        if (obj is DefaultAsset)
+        {
+            string directoryPath = AssetDatabase.GetAssetPath(obj);
+            if (Directory.Exists(directoryPath))
+            {
+                return DoesDirectoryContainsValidAssetForSOBindingCheck(directoryPath);
+            }
+        }
+        return false;
+    }
+
+    private static bool DoesDirectoryContainsValidAssetForSOBindingCheck(string directoryPath)
+    {
+        string[] assetPaths = Directory.GetFiles(directoryPath);
+        for (int i = 0; i < assetPaths.Length; ++i)
+        {
+            if (IsAssetValidForSOBindingCheck(AssetDatabase.LoadAssetAtPath<ScriptableObject>(assetPaths[i])))
+            {
+                return true;
+            }
+        }
+
+        string[] subDirectoryPaths = Directory.GetDirectories(directoryPath);
+        for (int i = 0; i < subDirectoryPaths.Length; ++i)
+        {
+            if (DoesDirectoryContainsValidAssetForSOBindingCheck(subDirectoryPaths[i]))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private static bool IsBindingMissing(UnityEngine.Object obj, ref List<string> missingBindingFields)
     {
         missingBindingFields.Clear();
 

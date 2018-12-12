@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 [CreateAssetMenu(fileName = "SOWBool", menuName = "SO/Atomics/Bool/Watchable", order = 1)]
 public class SOWBool : SOBool, ISOWatchable

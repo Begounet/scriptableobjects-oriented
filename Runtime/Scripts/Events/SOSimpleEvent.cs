@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
@@ -43,7 +44,12 @@ public class SOSimpleEvent : SOEvent
     public override void EditorRaise()
     {
         Raise();
-    }    
+    }
+
+    public void Subscribe(SOSimpleEvent onDateTimeChangedEvent, bool enable)
+    {
+        throw new NotImplementedException();
+    }
 
 #endif
 }

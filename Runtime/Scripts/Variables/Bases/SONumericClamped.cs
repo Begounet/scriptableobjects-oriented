@@ -22,9 +22,9 @@ public abstract class SONumericClamped<ValueType> : ISONumeric
 
     [SerializeField]
     [HideInInspector]
-    private ValueType _value;
+    protected ValueType _value;
 
-    public ValueType Value
+    public virtual ValueType Value
     {
         get { return _value; }
         set

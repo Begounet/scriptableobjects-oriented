@@ -13,10 +13,28 @@ public class SOWIntegerClamped : SOIntegerClamped, ISOWatchable
         get { return _value; }
         set
         {
-            if (_value != value)
+            var previousValue = _value;
+            _value = value;
+            switch (clampMode)
             {
-                _value = value;
+                case ClampMode.Minimum:
+                    _value = ClampByMaximum(min);
+                    break;
 
+                case ClampMode.Maximum:
+                    _value = ClampByMinimum(max);
+                    break;
+
+                case ClampMode.MinimumAndMaximum:
+                    _value = Clamp(min, max);
+                    break;
+
+                default:
+                    break;
+            }
+
+            if (previousValue != _value)
+            {
 #if UNITY_EDITOR
                 _cachedValue = _value;
 #endif

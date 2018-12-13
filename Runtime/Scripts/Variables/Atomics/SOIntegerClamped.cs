@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "SOInteger", menuName = "SO/Atomics/Integer (Clamped)")]
+[CreateAssetMenu(fileName = "SOInteger", menuName = "SO/Atomics/Integer (Clamped)/Simple")]
 public class SOIntegerClamped : SONumericClamped<int>
 {
     protected override int ClampByMinimum(int Min)

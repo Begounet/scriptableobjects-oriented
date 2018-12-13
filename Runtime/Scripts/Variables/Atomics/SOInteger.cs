@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "SOInteger", menuName = "SO/Atomics/Integer")]
+[CreateAssetMenu(fileName = "SOInteger", menuName = "SO/Atomics/Integer/Simple")]
 public class SOInteger : SONumeric<int>
 {
     [SerializeField]

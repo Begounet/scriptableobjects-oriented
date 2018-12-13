@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "SOWIntegerClamped", menuName = "SO/Atomics/Bool/SOWIntegerClamped", order = 1)]
+[CreateAssetMenu(fileName = "SOWInteger", menuName = "SO/Atomics/Integer (Clamped)/Watchable", order = 1)]
 public class SOWIntegerClamped : SOIntegerClamped, ISOWatchable
 {
     public event Action<ISOWatchable> onSOChanged;

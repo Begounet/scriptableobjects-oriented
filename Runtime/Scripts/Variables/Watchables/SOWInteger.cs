@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "SOWInteger", menuName = "SO/Atomics/Bool/SOWInteger", order = 1)]
+[CreateAssetMenu(fileName = "SOWInteger", menuName = "SO/Atomics/Integer/Watchable", order = 1)]
 public class SOWInteger : SOInteger, ISOWatchable
 {
     public event Action<ISOWatchable> onSOChanged;

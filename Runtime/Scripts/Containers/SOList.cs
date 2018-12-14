@@ -10,7 +10,14 @@ public class SOList<ItemType> : SOBaseVariable
         set { list[idx] = value; }
     }
 
+    public int Count
+    {
+        get { return list.Count; }
+    }
+
+
     public List<ItemType> list;
+
 
     public void Add(ItemType item)
     {

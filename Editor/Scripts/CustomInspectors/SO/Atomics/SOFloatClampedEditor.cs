@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-[CustomEditor(typeof(SOFloatClamped))]
+[CustomEditor(typeof(SOFloatClamped), true)]
 public class SOFloatClampedEditor : SONumericClampedEditor
 {
     protected override void DrawSlider()

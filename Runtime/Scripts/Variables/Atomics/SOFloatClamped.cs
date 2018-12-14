@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "SOFloat", menuName = "SO/Atomics/Float (Clamped)")]
+[CreateAssetMenu(fileName = "SOFloat", menuName = "SO/Atomics/Float (Clamped)/Simple")]
 public class SOFloatClamped : SONumericClamped<float>, ISOFloat
 {
     protected override float ClampByMinimum(float Min)

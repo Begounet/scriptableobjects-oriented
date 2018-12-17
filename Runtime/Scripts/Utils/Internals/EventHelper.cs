@@ -16,6 +16,14 @@ namespace SO
             }
         }
 
+        public static void Raise(SOSimpleEvent soEvt)
+        {
+            if (soEvt != null)
+            {
+                soEvt.Raise();
+            }
+        }
+
         public static void Raise<T0>(Action<T0> evt, T0 arg1)
         {
             if (evt != null)
